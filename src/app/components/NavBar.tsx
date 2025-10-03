@@ -91,8 +91,6 @@ const NavBar = () => {
     },
   ];
 
-  const imageTL = gsap.timeline({})
-
   const handleImageChange = (id: string) => {
     navImages.forEach((image) => {
       if (image.label !== id) {
@@ -118,7 +116,7 @@ const NavBar = () => {
           clipPath: "inset(0 0% 0 0)",
           duration: 0.5,
           ease: "power1.out"
-        })
+        });
       } else {
         gsap.to(`#img-${image.label}`, {
           clipPath: "inset(0 100% 0 0)",
@@ -138,7 +136,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="relative h-screen">
+    <div className="fixed h-screen z-999 w-full">
       <div
         onClick={handleSideBar}
         className="absolute menu-wrap flex flex-col gap-2 top-10 left-10 cursor-pointer z-999"
