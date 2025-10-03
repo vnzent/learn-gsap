@@ -23,7 +23,12 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} antialiased`}
       >
+        <main id="smooth-wrapper">
+        <section id="smooth-content">
         {children}
+
+        </section>
+        </main>
       </body>
     </html>
   );

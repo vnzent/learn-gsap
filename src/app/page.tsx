@@ -9,6 +9,7 @@ export default function Home() {
       <NavBar />
       <HomePage />
       <About />
+      <div className="h-screen"></div>
     </>
   );
 }
