@@ -8,17 +8,17 @@ const NavBar = () => {
   const tl = gsap.timeline({ reversed: true, paused: true });
 
   useEffect(() => {
-    const lineOne = document.querySelector(".line-one");
-    const lineTwo = document.querySelector(".line-two");
-    const menuWrap = document.querySelector(".menu-wrap")!.getClientRects();
-    const widthOne = lineOne!.getClientRects()[0];
-    const widthTwo = lineTwo!.getClientRects()[0];
+    // const lineOne = document.querySelector(".line-one");
+    // const lineTwo = document.querySelector(".line-two");
+    // const menuWrap = document.querySelector(".menu-wrap")!.getClientRects();
+    // const widthOne = lineOne!.getClientRects()[0];
+    // const widthTwo = lineTwo!.getClientRects()[0];
 
-    console.log(widthOne);
+    // console.log(widthOne);
 
-    const gap = menuWrap[0].height - widthOne.height - widthTwo.height;
-    console.log({ gap });
-    console.log(menuWrap);
+    // const gap = menuWrap[0].height - widthOne.height - widthTwo.height;
+    // console.log({ gap });
+    // console.log(menuWrap);
     tl.to(".sidebar", { clipPath: "circle(150% at 0% 0%" }, "<")
       .to(
         ".line-one",
@@ -37,35 +37,85 @@ const NavBar = () => {
         "<"
       )
       .to(".nav-link", { y: 0, duration: 0.5, stagger: 0.05 }, "<")
-      .to(".nav-img", { clipPath: "inset(0 0% 0 0)", scale: 1 }, "<");
+      .to("#img-home", { clipPath: "inset(0 0% 0 0)", scale: 1 }, "<");
+    tl.addLabel("menuIn");
   }, []);
 
   const menus = [
     {
       label: "Home",
       url: "#home",
+      id: "home",
     },
     {
       label: "About",
       url: "#about",
+      id: "about",
     },
     {
       label: "Content",
       url: "#content",
+      id: "content",
     },
     {
       label: "Sub Content",
       url: "#sub-content",
+      id: "sub-content",
     },
     {
       label: "Contact",
       url: "#contact",
+      id: "contact",
     },
   ];
 
+  const navImages = [
+    {
+      src: "./assets/nav-1.jpeg",
+      label: "home",
+    },
+    {
+      src: "./assets/nav-2.jpeg",
+      label: "about",
+    },
+    {
+      src: "./assets/nav-3.jpeg",
+      label: "content",
+    },
+    {
+      src: "./assets/nav-4.jpeg",
+      label: "sub-content",
+    },
+    {
+      src: "./assets/nav-5.jpeg",
+      label: "contact",
+    },
+  ];
+
+  const menuTl = gsap.timeline({ reversed: true, paused: true });
+
+  const handleImageChange = (id: string) => {
+    menuTl.to(`#img-${id}`, { clipPath: "inset(0 0% 0 0)", scale: 1 });
+
+    // if(tl.reversed()){
+    //   tl.play();
+    //   console.log("play")
+    // } else {
+    //   tl.reverse()
+    //   console.log("reverse")
+    // }
+    menuTl.play();
+    console.log("play");
+  };
+
+  const handleImageReverse = (id: string) => {
+    menuTl.reverse();
+    console.log("reverse");
+  };
+
   const handleSideBar = () => {
     if (tl.reversed()) {
-      tl.play();
+      tl.play("menuIn");
     } else {
       tl.reverse();
     }
@@ -88,6 +138,8 @@ const NavBar = () => {
           <ul className="flex flex-col gap-7 text-3xl font-semibold text-white">
             {menus.map((menu, index) => (
               <li
+                onMouseEnter={() => handleImageChange(menu.id)}
+                onMouseLeave={() => handleImageReverse(menu.id)}
                 key={index}
                 className="overflow-hidden relative h-10 w-100 flex"
               >
@@ -101,13 +153,17 @@ const NavBar = () => {
             ))}
           </ul>
         </div>
-        <div className="w-1/2 h-full overflow-hidden">
-          <img
-            className="nav-img w-full h-full object-cover scale-150"
-            src="./assets/nav.jpeg"
-            alt="resort"
-            style={{ clipPath: "inset(0 100% 0 0)" }}
-          />
+        <div className="w-1/2 h-full relative">
+          {navImages.map((image, index) => (
+            <img
+              id={"img-" + image.label}
+              key={index}
+              className="nav-img1 absolute w-full h-full object-cover scale-150"
+              src={image.src}
+              alt={`resort ${index + 1}`}
+              style={{ clipPath: "inset(0 100% 0 0)" }}
+            />
+          ))}
         </div>
       </nav>
     </div>
