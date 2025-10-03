@@ -4,21 +4,21 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useEffect } from "react";
 
+// const lineOne = document.querySelector(".line-one");
+// const lineTwo = document.querySelector(".line-two");
+// const menuWrap = document.querySelector(".menu-wrap")!.getClientRects();
+// const widthOne = lineOne!.getClientRects()[0];
+// const widthTwo = lineTwo!.getClientRects()[0];
+
+// console.log(widthOne);
+
+// const gap = menuWrap[0].height - widthOne.height - widthTwo.height;
+// console.log({ gap });
+// console.log(menuWrap);
 const NavBar = () => {
   const tl = gsap.timeline({ reversed: true, paused: true });
 
   useEffect(() => {
-    // const lineOne = document.querySelector(".line-one");
-    // const lineTwo = document.querySelector(".line-two");
-    // const menuWrap = document.querySelector(".menu-wrap")!.getClientRects();
-    // const widthOne = lineOne!.getClientRects()[0];
-    // const widthTwo = lineTwo!.getClientRects()[0];
-
-    // console.log(widthOne);
-
-    // const gap = menuWrap[0].height - widthOne.height - widthTwo.height;
-    // console.log({ gap });
-    // console.log(menuWrap);
     tl.to(".sidebar", { clipPath: "circle(150% at 0% 0%" }, "<")
       .to(
         ".line-one",
@@ -38,7 +38,6 @@ const NavBar = () => {
       )
       .to(".nav-link", { y: 0, duration: 0.5, stagger: 0.05 }, "<")
       .to("#img-home", { clipPath: "inset(0 0% 0 0)", scale: 1 }, "<");
-    tl.addLabel("menuIn");
   }, []);
 
   const menus = [
@@ -92,30 +91,47 @@ const NavBar = () => {
     },
   ];
 
-  const menuTl = gsap.timeline({ reversed: true, paused: true });
+  const imageTL = gsap.timeline({})
 
   const handleImageChange = (id: string) => {
-    menuTl.to(`#img-${id}`, { clipPath: "inset(0 0% 0 0)", scale: 1 });
-
-    // if(tl.reversed()){
-    //   tl.play();
-    //   console.log("play")
-    // } else {
-    //   tl.reverse()
-    //   console.log("reverse")
-    // }
-    menuTl.play();
-    console.log("play");
+    navImages.forEach((image) => {
+      if (image.label !== id) {
+        gsap.to(`#img-${image.label}`, {
+          clipPath: "inset(0 100% 0 0)",
+          duration: 0.5,
+          ease: "power1.in"
+        });
+      } else {
+        gsap.to(`#img-${id}`, {
+          clipPath: "inset(0 0% 0 0)",
+          duration: 0.5,
+          ease: "power1.out"
+        });
+      }
+    });
   };
 
-  const handleImageReverse = (id: string) => {
-    menuTl.reverse();
-    console.log("reverse");
+  const handleImageReverse = () => {
+    navImages.forEach((image) => {
+      if(image.label === "home") {
+        gsap.to("#img-home", {
+          clipPath: "inset(0 0% 0 0)",
+          duration: 0.5,
+          ease: "power1.out"
+        })
+      } else {
+        gsap.to(`#img-${image.label}`, {
+          clipPath: "inset(0 100% 0 0)",
+          duration: 0.5,
+          ease: "power1.in"
+        });
+      }
+    });
   };
 
   const handleSideBar = () => {
     if (tl.reversed()) {
-      tl.play("menuIn");
+      tl.play();
     } else {
       tl.reverse();
     }
@@ -139,13 +155,14 @@ const NavBar = () => {
             {menus.map((menu, index) => (
               <li
                 onMouseEnter={() => handleImageChange(menu.id)}
-                onMouseLeave={() => handleImageReverse(menu.id)}
+                onMouseLeave={handleImageReverse}
+                onClick={handleSideBar}
                 key={index}
-                className="overflow-hidden relative h-10 w-100 flex"
+                className=" overflow-hidden relative h-10 w-max flex"
               >
                 <Link
                   href={menu.url}
-                  className="nav-link absolute h-10 translate-y-[100%]"
+                  className="nav-link relative h-10 w-max translate-y-[100%]"
                 >
                   {menu.label}
                 </Link>
@@ -153,12 +170,12 @@ const NavBar = () => {
             ))}
           </ul>
         </div>
-        <div className="w-1/2 h-full relative">
+        <div className="w-1/2 h-full relative overflow-hidden">
           {navImages.map((image, index) => (
             <img
               id={"img-" + image.label}
               key={index}
-              className="nav-img1 absolute w-full h-full object-cover scale-150"
+              className="absolute z-10 w-full h-full object-cover scale-150"
               src={image.src}
               alt={`resort ${index + 1}`}
               style={{ clipPath: "inset(0 100% 0 0)" }}
