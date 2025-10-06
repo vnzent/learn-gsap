@@ -136,7 +136,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="fixed h-screen z-999 w-full">
+    <div className="fixed h-screen w-full z-999">
       <div
         onClick={handleSideBar}
         className="absolute menu-wrap flex flex-col gap-2 top-10 left-10 cursor-pointer z-999"
